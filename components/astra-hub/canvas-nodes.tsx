@@ -13,6 +13,7 @@ interface TerminalNodeData {
   label: string;
   active: boolean;
   activeDots?: number[];
+  selected?: boolean;
   [key: string]: unknown;
 }
 
@@ -25,7 +26,7 @@ export const FolderNode = memo(function FolderNode({
       <div className="w-20 h-16 bg-card border border-primary rounded-lg flex items-center justify-center">
         <Folder className="w-8 h-8 text-primary" />
       </div>
-      <span className="text-white text-[10px] tracking-wider">{nodeData.label}</span>
+      <span className="text-foreground text-[10px] tracking-wider">{nodeData.label}</span>
       <Handle type="target" position={Position.Top} className="!bg-primary !w-2 !h-2" />
       <Handle type="source" position={Position.Bottom} className="!bg-primary !w-2 !h-2" />
     </div>
@@ -90,14 +91,14 @@ export const TerminalNode = memo(function TerminalNode({
 }: NodeProps<{ data: TerminalNodeData }>) {
   const nodeData = data as unknown as TerminalNodeData;
   return (
-    <div className="flex flex-col items-center gap-2">
-      <div className="relative">
+    <div className="flex flex-col items-center gap-2 cursor-pointer">
+      <div className={`relative rounded-lg transition-all ${nodeData.selected ? "ring-2 ring-accent ring-offset-2 ring-offset-background p-1" : "p-1"}`}>
         <ConstellationCluster active={nodeData.active} activeDots={nodeData.activeDots} />
         {nodeData.active && (
           <div className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-accent animate-pulse-glow" style={{ color: '#c084fc' }} />
         )}
       </div>
-      <span className="text-white text-[10px] tracking-wider">{nodeData.label}</span>
+      <span className={`text-[10px] tracking-wider ${nodeData.selected ? "text-accent" : "text-foreground"}`}>{nodeData.label}</span>
       <Handle type="target" position={Position.Top} className="!bg-primary !w-2 !h-2 !opacity-0" />
       <Handle type="source" position={Position.Bottom} className="!bg-primary !w-2 !h-2 !opacity-0" />
     </div>
